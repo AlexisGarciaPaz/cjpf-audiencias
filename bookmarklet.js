@@ -1,5 +1,8 @@
-// ─── CJPF Audiencias Bookmarklet v1.1 ────────────────────────────────────────
+// ─── CJPF Audiencias Bookmarklet v2.0 (iframe) ───────────────────────────────
 (function(){
+
+  let prevFrame = document.getElementById('_bm_frame');
+  if(prevFrame){ prevFrame.remove(); return; }
 
   const JUECES = {
     'ECRL': 'Erika Carolina Ramírez López',
@@ -18,40 +21,40 @@
   };
 
   const AUDIENCIA = {
-    'continuacion de audiencia inicial':                '27',
-    'continuacion de inicial con detenido':             '27',
-    'continuacion de inicial':                          '27',
-    'continuacion de audiencia':                        '27',
-    'continuacion':                                     '27',
-    'procedimiento abreviado':                          '6',
-    'prorroga de plazo de investigacion complementaria':'26',
-    'audiencia de prorroga de plazo':                   '26',
-    'prorroga de plazo':                                '26',
-    'prorroga de investigacion':                        '26',
-    'cierre de investigacion complementaria':           '30',
-    'cierre de investigacion':                          '30',
-    'revision de las condiciones u obligaciones':       '5',
-    'revision de medida cautelar':                      '36',
-    'resolver sobre beneficio de libertad':             '17',
-    'beneficio de libertad condicionada':               '17',
-    'beneficio de libertad':                            '17',
-    'suspension condicional del proceso':               '14',
-    'suspension condicional':                           '14',
-    'medida cautelar':                                  '13',
-    'juicio oral':                                      '29',
-    'juicio':                                           '29',
-    'intermedia a abreviado':                           '2',
-    'intermedia':                                       '2',
-    'inicial con detenidos':                            '1',
-    'inicial con detenido':                             '1',
-    'inicial':                                          '1',
-    'abreviado':                                        '55',
-    'sobreseimiento':                                   '1',
-    'desistimiento':                                    '2',
-    'acumulacion':                                      '2',
-    'separacion':                                       '2',
-    'verificacion':                                     '30',
-    'ejecucion':                                        '17'
+    'continuacion de audiencia inicial':                 '27',
+    'continuacion de inicial con detenido':              '27',
+    'continuacion de inicial':                           '27',
+    'continuacion de audiencia':                         '27',
+    'continuacion':                                      '27',
+    'procedimiento abreviado':                           '6',
+    'prorroga de plazo de investigacion complementaria': '26',
+    'audiencia de prorroga de plazo':                    '26',
+    'prorroga de plazo':                                 '26',
+    'prorroga de investigacion':                         '26',
+    'cierre de investigacion complementaria':            '30',
+    'cierre de investigacion':                           '30',
+    'revision de las condiciones u obligaciones':        '5',
+    'revision de medida cautelar':                       '36',
+    'resolver sobre beneficio de libertad':              '17',
+    'beneficio de libertad condicionada':                '17',
+    'beneficio de libertad':                             '17',
+    'suspension condicional del proceso':                '14',
+    'suspension condicional':                            '14',
+    'medida cautelar':                                   '13',
+    'juicio oral':                                       '29',
+    'juicio':                                            '29',
+    'intermedia a abreviado':                            '2',
+    'intermedia':                                        '2',
+    'inicial con detenidos':                             '1',
+    'inicial con detenido':                              '1',
+    'inicial':                                           '1',
+    'abreviado':                                         '55',
+    'sobreseimiento':                                    '1',
+    'desistimiento':                                     '2',
+    'acumulacion':                                       '2',
+    'separacion':                                        '2',
+    'verificacion':                                      '30',
+    'ejecucion':                                         '17'
   };
 
   const DELITO = {
@@ -77,7 +80,6 @@
   function norm(s){
     return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   }
-
   function parseFecha(txt){
     let m=txt.match(/(\d{1,2})[\/\-](\w+)[\/\-](\d{4})/);
     if(!m)return'';
@@ -85,33 +87,28 @@
     let mes=isNaN(m[2])?(MESES[norm(m[2])]||'01'):m[2].padStart(2,'0');
     return m[3]+'-'+mes+'-'+dia;
   }
-
   function parseHora(txt){
     let m=txt.match(/(\d{1,2})[\s:](\d{2})/);
     if(!m)return'';
     return m[1].padStart(2,'0')+':'+m[2]+':01';
   }
-
   function parseAudiencia(txt){
     let t=norm(txt);
     let keys=Object.keys(AUDIENCIA).sort((a,b)=>b.length-a.length);
     for(let k of keys){if(t.includes(norm(k)))return AUDIENCIA[k];}
     return'1';
   }
-
   function parseDelito(txt){
     let t=norm(txt);
     let keys=Object.keys(DELITO).sort((a,b)=>b.length-a.length);
     for(let k of keys){if(t.includes(norm(k)))return DELITO[k];}
     return'0';
   }
-
   function parseEnlace(txt){
     let t=norm(txt);
     for(let k of Object.keys(ENLACE)){if(t.includes(norm(k)))return ENLACE[k];}
     return'0';
   }
-
   function setVal(name,val){
     let el=document.getElementsByName(name)[0];
     if(!el)return;
@@ -124,45 +121,33 @@
     let lineas=texto.split('\n').map(l=>l.replace(/\*/g,'').replace(/^>\s*/,'').trim()).filter(l=>l);
     let d={fecha:'',horaini:'',horafin:'',tipoAud:'1',juez:'',imputados:'',delito:'0',resolucion:'',enlace:'0'};
 
-    // Juez
     for(let i=lineas.length-1;i>=0;i--){
       let l=lineas[i].trim().toUpperCase().replace(/[^A-Z]/g,'');
       if(JUECES[l]){d.juez=JUECES[l];break;}
     }
-
-    // Fecha
     for(let l of lineas){
       if(norm(l).includes('fecha')){
         let m=l.match(/(\d{1,2}[\/\-]\w+[\/\-]\d{4})/);
         if(m){d.fecha=parseFecha(m[1]);break;}
       }
     }
-
-    // Horas
     for(let l of lineas){
       let ln=norm(l);
-      if(ln.includes('inici')&&l.match(/\d{1,2}[\s:]\d{2}/)){
+      if(ln.includes('inici')&&l.match(/\d{1,2}[\s:]\d{2}/))
         d.horaini=parseHora(l.match(/(\d{1,2}[\s:]\d{2})/)[0]);
-      }
-      if(ln.includes('finaliz')&&l.match(/\d{1,2}[\s:]\d{2}/)){
+      if(ln.includes('finaliz')&&l.match(/\d{1,2}[\s:]\d{2}/))
         d.horafin=parseHora(l.match(/(\d{1,2}[\s:]\d{2})/)[0]);
-      }
     }
-
-    // Tipo audiencia
     for(let l of lineas){
       let m=l.match(/\(([^)]+)\)/);
       if(m){d.tipoAud=parseAudiencia(m[1]);break;}
     }
-
-    // Delito
     for(let l of lineas){
       if(norm(l).match(/^delito:/)){
         d.delito=parseDelito(l.replace(/^delito:\s*/i,''));break;
       }
     }
 
-    // Imputados
     let lista=[],enImp=false;
     for(let i=0;i<lineas.length;i++){
       let l=lineas[i],ln=norm(l);
@@ -190,7 +175,6 @@
     }
     d.imputados=lista.join(' ');
 
-    // Resolución
     let enRes=false,resL=[];
     for(let l of lineas){
       let ln=norm(l);
@@ -207,65 +191,65 @@
     }
     d.resolucion=resL.join(' ').trim();
 
-    // Enlace seguridad
     for(let l of lineas){
       if(norm(l).includes('reporta')){d.enlace=parseEnlace(l);break;}
     }
-
     return d;
   }
 
-  // ─── UI ────────────────────────────────────────────────────────────────────
-  let prev=document.getElementById('_bm_popup');
-  if(prev){prev.remove();return;}
+  // ─── IFRAME UI ─────────────────────────────────────────────────────────────
+  let iframe=document.createElement('iframe');
+  iframe.id='_bm_frame';
+  iframe.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;border:none;z-index:2147483647;';
+  document.documentElement.appendChild(iframe);
 
-  // Observer para proteger el popup
-  let observer=new MutationObserver(function(mutations){
-    mutations.forEach(function(m){
-      m.removedNodes.forEach(function(n){
-        if(n.id==='_bm_popup'){
-          document.body.appendChild(n);
-        }
-      });
-    });
-  });
-  observer.observe(document.body,{childList:true,subtree:false});
-
-  let overlay=document.createElement('div');
-  overlay.id='_bm_popup';
-  overlay.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);z-index:2147483647;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif';
-
-  let box=document.createElement('div');
-  box.style.cssText='background:#1e1e2e;color:#cdd6f4;border-radius:12px;padding:24px;width:540px;max-width:95vw;box-shadow:0 8px 32px rgba(0,0,0,0.6);box-sizing:border-box';
-  box.innerHTML=`
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-      <span style="color:#89b4fa;font-size:16px;font-weight:bold;">📋 Llenar Formulario de Audiencia</span>
-      <button id="_bm_x" style="background:#45475a;color:#cdd6f4;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:16px;">✕</button>
+  let doc=iframe.contentDocument||iframe.contentWindow.document;
+  doc.open();
+  doc.write(`<!DOCTYPE html><html><head><style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:rgba(0,0,0,0.65);display:flex;align-items:center;
+         justify-content:center;height:100vh;font-family:Arial,sans-serif;}
+    .box{background:#1e1e2e;color:#cdd6f4;border-radius:12px;padding:24px;
+         width:540px;max-width:95vw;box-shadow:0 8px 32px rgba(0,0,0,0.6);}
+    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+    .title{color:#89b4fa;font-size:16px;font-weight:bold;}
+    .btnx{background:#45475a;color:#cdd6f4;border:none;border-radius:6px;
+          padding:4px 10px;cursor:pointer;font-size:16px;}
+    textarea{width:100%;height:185px;background:#313244;color:#cdd6f4;
+             border:1px solid #45475a;border-radius:8px;padding:10px;
+             font-size:13px;resize:vertical;outline:none;}
+    .btnok{width:100%;background:#89b4fa;color:#1e1e2e;border:none;
+           border-radius:8px;padding:11px;font-size:14px;font-weight:bold;
+           cursor:pointer;margin-top:10px;}
+    .btnok:hover{background:#74c7ec;}
+    #st{margin-top:10px;font-size:12px;color:#f38ba8;min-height:16px;}
+    #pv{margin-top:8px;font-size:12px;color:#a6e3a1;line-height:1.7;
+        display:none;background:#313244;border-radius:8px;padding:10px;}
+  </style></head><body>
+  <div class="box">
+    <div class="header">
+      <span class="title">📋 Llenar Formulario de Audiencia</span>
+      <button class="btnx" id="bx">✕</button>
     </div>
-    <textarea id="_bm_txt" placeholder="Pega aquí el reporte de WhatsApp..." style="width:100%;height:190px;background:#313244;color:#cdd6f4;border:1px solid #45475a;border-radius:8px;padding:10px;font-size:13px;resize:vertical;box-sizing:border-box;outline:none;"></textarea>
-    <div style="margin-top:10px;">
-      <button id="_bm_ok" style="width:100%;background:#89b4fa;color:#1e1e2e;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:bold;cursor:pointer;">✅ Llenar Formulario</button>
-    </div>
-    <div id="_bm_st" style="margin-top:10px;font-size:12px;color:#f38ba8;min-height:16px;"></div>
-    <div id="_bm_pv" style="margin-top:8px;font-size:12px;color:#a6e3a1;line-height:1.6;display:none;background:#313244;border-radius:8px;padding:10px;"></div>
-  `;
+    <textarea id="txt" placeholder="Pega aquí el reporte de WhatsApp..."></textarea>
+    <button class="btnok" id="ok">✅ Llenar Formulario</button>
+    <div id="st"></div>
+    <div id="pv"></div>
+  </div>
+  </body></html>`);
+  doc.close();
 
-  overlay.appendChild(box);
-  document.body.appendChild(overlay);
-  setTimeout(()=>document.getElementById('_bm_txt').focus(),100);
+  setTimeout(()=>doc.getElementById('txt').focus(),150);
 
-  function cerrar(){
-    observer.disconnect();
-    overlay.remove();
-  }
+  function cerrar(){ iframe.remove(); }
 
-  document.getElementById('_bm_x').onclick=()=>cerrar();
-  overlay.onclick=e=>{if(e.target===overlay)cerrar();};
+  doc.getElementById('bx').onclick=cerrar;
+  doc.body.onclick=e=>{ if(e.target===doc.body)cerrar(); };
 
-  document.getElementById('_bm_ok').onclick=function(){
-    let texto=document.getElementById('_bm_txt').value;
-    let st=document.getElementById('_bm_st');
-    let pv=document.getElementById('_bm_pv');
+  doc.getElementById('ok').onclick=function(){
+    let texto=doc.getElementById('txt').value;
+    let st=doc.getElementById('st');
+    let pv=doc.getElementById('pv');
     if(!texto.trim()){st.textContent='⚠️ Pega el reporte primero.';return;}
 
     let d=parsear(texto);
