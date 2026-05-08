@@ -1,5 +1,6 @@
-javascript:(function(){
-  // ─── MAPEOS ──────────────────────────────────────────────────────────────
+// ─── CJPF Audiencias Bookmarklet v1.1 ────────────────────────────────────────
+(function(){
+
   const JUECES = {
     'ECRL': 'Erika Carolina Ramírez López',
     'AKAC': 'Ana Karina Aragón Cutiño',
@@ -8,82 +9,63 @@ javascript:(function(){
   };
 
   const ENLACE = {
-    'víctor manuel lópez medina':    '916',
-    'victor manuel lopez medina':    '916',
-    'arturo uriarte soto':           '731',
-    'hugo enrique guzmán zepeda':    '0',
-    'hugo enrique guzman zepeda':    '0',
-    'césar reyniel castro montoya':  '145',
-    'cesar reyniel castro montoya':  '145',
-    'alexis omar garcía paz':        '0',
-    'alexis omar garcia paz':        '0',
-    'enrique lópez landeros':        '0',
-    'enrique lopez landeros':        '0'
+    'victor manuel lopez medina':   '916',
+    'arturo uriarte soto':          '731',
+    'hugo enrique guzman zepeda':   '0',
+    'cesar reyniel castro montoya': '145',
+    'alexis omar garcia paz':       '0',
+    'enrique lopez landeros':       '0'
   };
 
   const AUDIENCIA = {
-    'inicial': '1',
-    'inicial con detenido': '1',
-    'inicial con detenidos': '1',
-    'intermedia': '2',
-    'intermedia a abreviado': '2',
-    'procedimiento abreviado': '6',
-    'continuación': '27',
-    'continuacion': '27',
-    'continuación de inicial': '27',
-    'continuacion de inicial': '27',
-    'continuación de audiencia inicial': '27',
-    'continuacion de audiencia inicial': '27',
-    'prórroga de investigación': '26',
-    'prorroga de investigacion': '26',
-    'prórroga de plazo': '26',
-    'prorroga de plazo': '26',
-    'audiencia de prórroga': '26',
-    'audiencia de prorroga': '26',
-    'cierre de investigación': '30',
-    'cierre de investigacion': '30',
-    'cierre de investigación complementaria': '30',
-    'cierre de investigacion complementaria': '30',
-    'juicio oral': '29',
-    'juicio': '29',
-    'abreviado': '55',
-    'medida cautelar': '13',
-    'revisión de medida cautelar': '36',
-    'revision de medida cautelar': '36',
-    'beneficio de libertad': '17',
-    'beneficio de libertad condicionada': '17',
-    'suspensión condicional': '14',
-    'suspension condicional': '14',
-    'resolver sobre beneficio': '17',
-    'revisión de las condiciones': '5',
-    'revision de las condiciones': '5',
-    'solicitud de sobreseimiento': '1',
-    'sobreseimiento': '1',
-    'desistimiento': '2',
-    'acumulación': '2',
-    'separación': '2',
-    'verificación': '30'
+    'continuacion de audiencia inicial':                '27',
+    'continuacion de inicial con detenido':             '27',
+    'continuacion de inicial':                          '27',
+    'continuacion de audiencia':                        '27',
+    'continuacion':                                     '27',
+    'procedimiento abreviado':                          '6',
+    'prorroga de plazo de investigacion complementaria':'26',
+    'audiencia de prorroga de plazo':                   '26',
+    'prorroga de plazo':                                '26',
+    'prorroga de investigacion':                        '26',
+    'cierre de investigacion complementaria':           '30',
+    'cierre de investigacion':                          '30',
+    'revision de las condiciones u obligaciones':       '5',
+    'revision de medida cautelar':                      '36',
+    'resolver sobre beneficio de libertad':             '17',
+    'beneficio de libertad condicionada':               '17',
+    'beneficio de libertad':                            '17',
+    'suspension condicional del proceso':               '14',
+    'suspension condicional':                           '14',
+    'medida cautelar':                                  '13',
+    'juicio oral':                                      '29',
+    'juicio':                                           '29',
+    'intermedia a abreviado':                           '2',
+    'intermedia':                                       '2',
+    'inicial con detenidos':                            '1',
+    'inicial con detenido':                             '1',
+    'inicial':                                          '1',
+    'abreviado':                                        '55',
+    'sobreseimiento':                                   '1',
+    'desistimiento':                                    '2',
+    'acumulacion':                                      '2',
+    'separacion':                                       '2',
+    'verificacion':                                     '30',
+    'ejecucion':                                        '17'
   };
 
   const DELITO = {
-    'sin conocimiento': '0',
-    'cpf': '0',
-    'cff': '0',
-    'portación de arma de fuego de uso exclusivo': '4',
-    'portacion de arma de fuego de uso exclusivo': '4',
-    'portación de armas de fuego de uso exclusivo': '4',
-    'portacion de armas de fuego de uso exclusivo': '4',
-    'posesión de arma de fuego de uso exclusivo': '4',
-    'posesion de arma de fuego de uso exclusivo': '4',
-    'portación de arma de fuego sin licencia': '20',
-    'portacion de arma de fuego sin licencia': '20',
-    'contra la salud': '8',
-    'contra la biodiversidad': '17',
-    'hidrocarburos': '1',
-    'robo de hidrocarburos': '1',
-    'operaciones con recursos': '1',
-    'recursos de procedencia ilícita': '1',
-    'recursos de procedencia ilicita': '1'
+    'portacion de arma de fuego de uso exclusivo':   '4',
+    'portacion de armas de fuego de uso exclusivo':  '4',
+    'posesion de arma de fuego de uso exclusivo':    '4',
+    'portacion de arma de fuego sin licencia':       '20',
+    'contra la biodiversidad':                       '17',
+    'contra la salud':                               '8',
+    'hidrocarburos':                                 '1',
+    'recursos de procedencia ilicita':               '1',
+    'operaciones con recursos':                      '1',
+    'cpf':                                           '0',
+    'cff':                                           '0'
   };
 
   const MESES = {
@@ -92,282 +74,229 @@ javascript:(function(){
     'septiembre':'09','octubre':'10','noviembre':'11','diciembre':'12'
   };
 
-  // ─── FUNCIONES AUXILIARES ────────────────────────────────────────────────
-  function parseFecha(texto) {
-    // Formato: 05/Mayo/2026 o 05/05/2026 o 5/Marzo/2026
-    let m = texto.match(/(\d{1,2})[\/\-](\w+)[\/\-](\d{4})/);
-    if (!m) return '';
-    let dia = m[1].padStart(2,'0');
-    let mes = isNaN(m[2]) ? (MESES[m[2].toLowerCase()] || '01') : m[2].padStart(2,'0');
-    return `${m[3]}-${mes}-${dia}`;
+  function norm(s){
+    return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   }
 
-  function parseHora(texto) {
-    let m = texto.match(/(\d{1,2}):(\d{2})/);
-    if (!m) return '';
-    return `${m[1].padStart(2,'0')}:${m[2]}:01`;
+  function parseFecha(txt){
+    let m=txt.match(/(\d{1,2})[\/\-](\w+)[\/\-](\d{4})/);
+    if(!m)return'';
+    let dia=m[1].padStart(2,'0');
+    let mes=isNaN(m[2])?(MESES[norm(m[2])]||'01'):m[2].padStart(2,'0');
+    return m[3]+'-'+mes+'-'+dia;
   }
 
-  function parseAudiencia(texto) {
-    let t = texto.toLowerCase().trim();
-    // Buscar match más largo primero
-    let keys = Object.keys(AUDIENCIA).sort((a,b) => b.length - a.length);
-    for (let k of keys) {
-      if (t.includes(k)) return AUDIENCIA[k];
-    }
-    return '1';
+  function parseHora(txt){
+    let m=txt.match(/(\d{1,2})[\s:](\d{2})/);
+    if(!m)return'';
+    return m[1].padStart(2,'0')+':'+m[2]+':01';
   }
 
-  function parseDelito(texto) {
-    let t = texto.toLowerCase();
-    let keys = Object.keys(DELITO).sort((a,b) => b.length - a.length);
-    for (let k of keys) {
-      if (t.includes(k)) return DELITO[k];
-    }
-    return '0';
+  function parseAudiencia(txt){
+    let t=norm(txt);
+    let keys=Object.keys(AUDIENCIA).sort((a,b)=>b.length-a.length);
+    for(let k of keys){if(t.includes(norm(k)))return AUDIENCIA[k];}
+    return'1';
   }
 
-  function parseJuez(texto) {
-    let t = texto.toUpperCase().trim();
-    return JUECES[t] || '';
+  function parseDelito(txt){
+    let t=norm(txt);
+    let keys=Object.keys(DELITO).sort((a,b)=>b.length-a.length);
+    for(let k of keys){if(t.includes(norm(k)))return DELITO[k];}
+    return'0';
   }
 
-  function parseEnlace(texto) {
-    let t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-    for (let k of Object.keys(ENLACE)) {
-      let kn = k.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-      if (t.includes(kn)) return ENLACE[k];
-    }
-    return '0';
+  function parseEnlace(txt){
+    let t=norm(txt);
+    for(let k of Object.keys(ENLACE)){if(t.includes(norm(k)))return ENLACE[k];}
+    return'0';
   }
 
-  function setVal(name, val) {
-    let el = document.getElementsByName(name)[0];
-    if (!el) return;
-    el.value = val;
-    el.dispatchEvent(new Event('change', { bubbles: true }));
+  function setVal(name,val){
+    let el=document.getElementsByName(name)[0];
+    if(!el)return;
+    el.value=val;
+    el.dispatchEvent(new Event('change',{bubbles:true}));
+    el.dispatchEvent(new Event('input',{bubbles:true}));
   }
 
-  function parsearReporte(texto) {
-    let lineas = texto.split('\n').map(l => l.trim());
-    let data = {
-      fecha: '', horaini: '', horafin: '', tipoAud: '',
-      juez: '', imputados: '', delito: '', resolucion: '',
-      enlace: '0', codigoJuez: ''
-    };
+  function parsear(texto){
+    let lineas=texto.split('\n').map(l=>l.replace(/\*/g,'').replace(/^>\s*/,'').trim()).filter(l=>l);
+    let d={fecha:'',horaini:'',horafin:'',tipoAud:'1',juez:'',imputados:'',delito:'0',resolucion:'',enlace:'0'};
 
-    // Detectar código de juez (última línea no vacía que sea código)
-    for (let i = lineas.length - 1; i >= 0; i--) {
-      let l = lineas[i].trim().toUpperCase();
-      if (/^(ECRL|AKAC|ABS|MICM)$/.test(l)) {
-        data.codigoJuez = l;
-        data.juez = JUECES[l] || '';
-        break;
-      }
+    // Juez
+    for(let i=lineas.length-1;i>=0;i--){
+      let l=lineas[i].trim().toUpperCase().replace(/[^A-Z]/g,'');
+      if(JUECES[l]){d.juez=JUECES[l];break;}
     }
 
     // Fecha
-    for (let l of lineas) {
-      if (l.toLowerCase().includes('fecha') && l.includes('/')) {
-        let m = l.match(/(\d{1,2}[\/\-]\w+[\/\-]\d{4})/);
-        if (m) { data.fecha = parseFecha(m[1]); break; }
-      }
-      if (l.toLowerCase().startsWith('*fecha')) {
-        let m = l.match(/(\d{1,2}[\/\-]\w+[\/\-]\d{4})/);
-        if (m) { data.fecha = parseFecha(m[1]); break; }
+    for(let l of lineas){
+      if(norm(l).includes('fecha')){
+        let m=l.match(/(\d{1,2}[\/\-]\w+[\/\-]\d{4})/);
+        if(m){d.fecha=parseFecha(m[1]);break;}
       }
     }
 
     // Horas
-    for (let l of lineas) {
-      if (l.toLowerCase().includes('inició') || l.toLowerCase().includes('inicio')) {
-        let m = l.match(/(\d{1,2}:\d{2})/);
-        if (m) data.horaini = parseHora(m[1]);
+    for(let l of lineas){
+      let ln=norm(l);
+      if(ln.includes('inici')&&l.match(/\d{1,2}[\s:]\d{2}/)){
+        d.horaini=parseHora(l.match(/(\d{1,2}[\s:]\d{2})/)[0]);
       }
-      if (l.toLowerCase().includes('finalizó') || l.toLowerCase().includes('finalizo')) {
-        let m = l.match(/(\d{1,2}:\d{2})/);
-        if (m) data.horafin = parseHora(m[1]);
+      if(ln.includes('finaliz')&&l.match(/\d{1,2}[\s:]\d{2}/)){
+        d.horafin=parseHora(l.match(/(\d{1,2}[\s:]\d{2})/)[0]);
       }
     }
 
-    // Tipo audiencia — buscar entre paréntesis
-    for (let l of lineas) {
-      let m = l.match(/\(([^)]+)\)/);
-      if (m) {
-        data.tipoAud = parseAudiencia(m[1]);
-        break;
-      }
+    // Tipo audiencia
+    for(let l of lineas){
+      let m=l.match(/\(([^)]+)\)/);
+      if(m){d.tipoAud=parseAudiencia(m[1]);break;}
     }
 
     // Delito
-    let enDelito = false;
-    for (let l of lineas) {
-      if (l.startsWith('> Delito:') || l.startsWith('Delito:')) {
-        let d = l.replace(/^>?\s*delito:\s*/i, '').trim();
-        data.delito = parseDelito(d);
-        enDelito = false;
-        break;
+    for(let l of lineas){
+      if(norm(l).match(/^delito:/)){
+        d.delito=parseDelito(l.replace(/^delito:\s*/i,''));break;
       }
     }
 
     // Imputados
-    let imputadosList = [];
-    let enImputados = false;
-    for (let i = 0; i < lineas.length; i++) {
-      let l = lineas[i];
-      if (l.toLowerCase().includes('imputado') && (l.includes(':') || l.includes('s:'))) {
-        enImputados = true;
-        // Si el nombre está en la misma línea
-        let inline = l.replace(/^>?\s*imputados?:\s*/i,'').trim();
-        if (inline && !inline.toLowerCase().includes('imputado')) {
-          inline.split(',').forEach(n => {
-            n = n.trim().replace(/^[-•*]\s*/,'');
-            if (n) imputadosList.push('• ' + n + '.');
+    let lista=[],enImp=false;
+    for(let i=0;i<lineas.length;i++){
+      let l=lineas[i],ln=norm(l);
+      if(ln.match(/imputad[oa]s?:/)||ln.match(/nombre.*imputad/)){
+        enImp=true;
+        let inline=l.replace(/^[^\:]+:\s*/,'').trim();
+        if(inline)inline.split(/,\s*(?=[A-ZÁÉÍÓÚ])/).forEach(n=>{
+          n=n.replace(/^[-•*\s]+/,'').trim();
+          if(n.length>2)lista.push('• '+n+(n.endsWith('.')?'':'.'));
+        });
+        continue;
+      }
+      if(enImp){
+        if(ln.startsWith('delito')||ln.startsWith('inici')||
+           ln.startsWith('resoluc')||ln.startsWith('reporta')||
+           (l.length>0&&l[0]==='*')){enImp=false;continue;}
+        let nombre=l.replace(/^[-•*⁠\s]+/,'').trim();
+        if(nombre&&nombre.length>2){
+          nombre.split(/,\s*(?=[A-ZÁÉÍÓÚ])/).forEach(n=>{
+            n=n.replace(/^[-•*\s]+/,'').trim();
+            if(n.length>2)lista.push('• '+n+(n.endsWith('.')?'':'.'));
           });
         }
-        continue;
-      }
-      if (enImputados) {
-        if (l.startsWith('>') || l.toLowerCase().startsWith('delito') || l.toLowerCase().startsWith('*delito')) {
-          enImputados = false;
-          break;
-        }
-        let nombre = l.replace(/^[-•*⁠]\s*/,'').trim();
-        if (nombre) imputadosList.push('• ' + nombre + (nombre.endsWith('.') ? '' : '.'));
       }
     }
-    // Si vienen separados por coma en una sola línea (formato César)
-    if (imputadosList.length === 0) {
-      for (let l of lineas) {
-        if (l.match(/^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+ [A-ZÁÉÍÓÚÑ]/)) {
-          imputadosList.push('• ' + l.trim() + (l.trim().endsWith('.') ? '' : '.'));
-        }
-      }
-    }
-    data.imputados = imputadosList.join(' ');
+    d.imputados=lista.join(' ');
 
     // Resolución
-    let enRes = false;
-    let resLines = [];
-    for (let l of lineas) {
-      if (l.toLowerCase().includes('resolución:') || l.toLowerCase().includes('resolucion:')) {
-        enRes = true;
-        let inline = l.replace(/^>?\s*resolución:\s*/i,'').replace(/^>?\s*resolucion:\s*/i,'').trim();
-        if (inline) resLines.push(inline);
+    let enRes=false,resL=[];
+    for(let l of lineas){
+      let ln=norm(l);
+      if(ln.match(/^resoluc[ií]on:/)){
+        enRes=true;
+        let inline=l.replace(/^[^\:]+:\s*/,'').trim();
+        if(inline)resL.push(inline);
         continue;
       }
-      if (enRes) {
-        if (l.startsWith('Reporta') || l.startsWith('*') || l === '') {
-          enRes = false;
-          break;
-        }
-        resLines.push(l);
+      if(enRes){
+        if(ln.startsWith('reporta')||l===''){enRes=false;break;}
+        resL.push(l);
       }
     }
-    data.resolucion = resLines.join(' ').trim();
+    d.resolucion=resL.join(' ').trim();
 
-    // Oficial para enlace seguridad
-    for (let l of lineas) {
-      if (l.toLowerCase().includes('reporta')) {
-        data.enlace = parseEnlace(l);
-        break;
-      }
+    // Enlace seguridad
+    for(let l of lineas){
+      if(norm(l).includes('reporta')){d.enlace=parseEnlace(l);break;}
     }
 
-    return data;
+    return d;
   }
 
-  // ─── UI ──────────────────────────────────────────────────────────────────
-  // Eliminar popup previo si existe
-  let prev = document.getElementById('_bm_popup');
-  if (prev) { prev.remove(); return; }
+  // ─── UI ────────────────────────────────────────────────────────────────────
+  let prev=document.getElementById('_bm_popup');
+  if(prev){prev.remove();return;}
 
-  let overlay = document.createElement('div');
-  overlay.id = '_bm_popup';
-  overlay.style.cssText = `
-    position:fixed;top:0;left:0;width:100%;height:100%;
-    background:rgba(0,0,0,0.6);z-index:999999;
-    display:flex;align-items:center;justify-content:center;
-    font-family:Arial,sans-serif;
-  `;
+  // Observer para proteger el popup
+  let observer=new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      m.removedNodes.forEach(function(n){
+        if(n.id==='_bm_popup'){
+          document.body.appendChild(n);
+        }
+      });
+    });
+  });
+  observer.observe(document.body,{childList:true,subtree:false});
 
-  let box = document.createElement('div');
-  box.style.cssText = `
-    background:#1e1e2e;color:#cdd6f4;border-radius:12px;
-    padding:24px;width:520px;max-width:95vw;
-    box-shadow:0 8px 32px rgba(0,0,0,0.5);
-  `;
+  let overlay=document.createElement('div');
+  overlay.id='_bm_popup';
+  overlay.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);z-index:2147483647;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif';
 
-  box.innerHTML = `
-    <h3 style="margin:0 0 12px;color:#89b4fa;font-size:16px;">
-      📋 Llenar Formulario de Audiencia
-    </h3>
-    <textarea id="_bm_texto" placeholder="Pega aquí el reporte de WhatsApp..."
-      style="width:100%;height:200px;background:#313244;color:#cdd6f4;
-             border:1px solid #45475a;border-radius:8px;padding:10px;
-             font-size:13px;resize:vertical;box-sizing:border-box;"></textarea>
-    <div id="_bm_preview" style="margin-top:10px;font-size:12px;color:#a6e3a1;display:none;"></div>
-    <div style="margin-top:12px;display:flex;gap:8px;">
-      <button id="_bm_btn_llenar" style="
-        flex:1;background:#89b4fa;color:#1e1e2e;border:none;
-        border-radius:8px;padding:10px;font-size:14px;font-weight:bold;cursor:pointer;">
-        ✅ Llenar Formulario
-      </button>
-      <button id="_bm_btn_cerrar" style="
-        background:#45475a;color:#cdd6f4;border:none;
-        border-radius:8px;padding:10px 16px;font-size:14px;cursor:pointer;">
-        ✕
-      </button>
+  let box=document.createElement('div');
+  box.style.cssText='background:#1e1e2e;color:#cdd6f4;border-radius:12px;padding:24px;width:540px;max-width:95vw;box-shadow:0 8px 32px rgba(0,0,0,0.6);box-sizing:border-box';
+  box.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <span style="color:#89b4fa;font-size:16px;font-weight:bold;">📋 Llenar Formulario de Audiencia</span>
+      <button id="_bm_x" style="background:#45475a;color:#cdd6f4;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:16px;">✕</button>
     </div>
-    <div id="_bm_status" style="margin-top:8px;font-size:12px;color:#f38ba8;text-align:center;"></div>
+    <textarea id="_bm_txt" placeholder="Pega aquí el reporte de WhatsApp..." style="width:100%;height:190px;background:#313244;color:#cdd6f4;border:1px solid #45475a;border-radius:8px;padding:10px;font-size:13px;resize:vertical;box-sizing:border-box;outline:none;"></textarea>
+    <div style="margin-top:10px;">
+      <button id="_bm_ok" style="width:100%;background:#89b4fa;color:#1e1e2e;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:bold;cursor:pointer;">✅ Llenar Formulario</button>
+    </div>
+    <div id="_bm_st" style="margin-top:10px;font-size:12px;color:#f38ba8;min-height:16px;"></div>
+    <div id="_bm_pv" style="margin-top:8px;font-size:12px;color:#a6e3a1;line-height:1.6;display:none;background:#313244;border-radius:8px;padding:10px;"></div>
   `;
 
   overlay.appendChild(box);
   document.body.appendChild(overlay);
+  setTimeout(()=>document.getElementById('_bm_txt').focus(),100);
 
-  document.getElementById('_bm_btn_cerrar').onclick = () => overlay.remove();
-  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+  function cerrar(){
+    observer.disconnect();
+    overlay.remove();
+  }
 
-  document.getElementById('_bm_btn_llenar').onclick = function() {
-    let texto = document.getElementById('_bm_texto').value;
-    if (!texto.trim()) {
-      document.getElementById('_bm_status').textContent = '⚠️ Pega el reporte primero.';
-      return;
-    }
+  document.getElementById('_bm_x').onclick=()=>cerrar();
+  overlay.onclick=e=>{if(e.target===overlay)cerrar();};
 
-    let d = parsearReporte(texto);
-    let status = document.getElementById('_bm_status');
+  document.getElementById('_bm_ok').onclick=function(){
+    let texto=document.getElementById('_bm_txt').value;
+    let st=document.getElementById('_bm_st');
+    let pv=document.getElementById('_bm_pv');
+    if(!texto.trim()){st.textContent='⚠️ Pega el reporte primero.';return;}
 
-    // Llenar campos
-    setVal('oj', 'Culiacán, Sinaloa');
-    if (d.juez)      setVal('juez', d.juez);
-    if (d.imputados) setVal('imputado', d.imputados);
-    if (d.resolucion) setVal('textareaRes', d.resolucion);
-    if (d.fecha)     setVal('fechac', d.fecha);
-    if (d.horaini)   setVal('horaini', d.horaini);
-    if (d.horafin)   setVal('horafin', d.horafin);
-    setVal('Tipaud', '2');
-    if (d.tipoAud)   setVal('aud', d.tipoAud);
-    if (d.delito)    setVal('del', d.delito);
-    setVal('prioridad', '1');
-    setVal('status', '1');
-    setVal('REPRO', '0');
-    setVal('mdelitos', '0');
-    setVal('jgc', d.enlace);
+    let d=parsear(texto);
+    setVal('oj','Culiacán, Sinaloa');
+    setVal('juez',d.juez);
+    setVal('imputado',d.imputados);
+    setVal('textareaRes',d.resolucion);
+    setVal('fechac',d.fecha);
+    setVal('horaini',d.horaini);
+    setVal('horafin',d.horafin);
+    setVal('Tipaud','2');
+    setVal('aud',d.tipoAud);
+    setVal('del',d.delito);
+    setVal('prioridad','1');
+    setVal('status','1');
+    setVal('REPRO','0');
+    setVal('mdelitos','0');
+    setVal('jgc',d.enlace);
 
-    // Mostrar resumen
-    let preview = document.getElementById('_bm_preview');
-    preview.style.display = 'block';
-    preview.innerHTML = `
-      ✅ <b>Campos llenados:</b><br>
-      📅 Fecha: ${d.fecha || '?'} &nbsp;
-      ⏰ ${d.horaini || '?'} → ${d.horafin || '?'}<br>
-      👨‍⚖️ ${d.juez || '? (revisa código juez)'}<br>
-      🎭 Audiencia: ${d.tipoAud} &nbsp; ⚖️ Delito: ${d.delito}<br>
-      👤 ${d.imputados.substring(0,60)}${d.imputados.length>60?'...':''}
+    st.style.color='#a6e3a1';
+    st.textContent='✅ Formulario llenado. Revisa antes de guardar.';
+    pv.style.display='block';
+    pv.innerHTML=`
+      <b>📅 Fecha:</b> ${d.fecha||'⚠️ no detectada'} &nbsp;
+      <b>⏰</b> ${d.horaini||'?'} → ${d.horafin||'?'}<br>
+      <b>👨‍⚖️ Juez:</b> ${d.juez||'⚠️ no detectado'}<br>
+      <b>🎭 Audiencia:</b> ${d.tipoAud} &nbsp;
+      <b>⚖️ Delito:</b> ${d.delito} &nbsp;
+      <b>🔗 Enlace:</b> ${d.enlace}<br>
+      <b>👤</b> ${d.imputados.substring(0,90)}${d.imputados.length>90?'...':''}
     `;
-    status.style.color = '#a6e3a1';
-    status.textContent = '✅ Formulario llenado. Revisa los campos antes de continuar.';
   };
 
 })();
